@@ -1,0 +1,66 @@
+class Solution {
+    
+    public boolean numCheck(String x) {
+        try {
+            int check = Integer.parseInt(x);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+    
+    public int myAtoi(String s) {
+        if (s.equals(""))
+            return 0;
+        String[] atoi = new String[s.length()];
+        String ret = "";
+        
+        for (int i = 0; i < s.length(); i++) {
+            String check = s.substring(i, i+1);
+            if (check.equals(" "))
+                continue;
+            if (check.equals("0") && i!=s.length()-1) {
+                if (numCheck(s.substring(i+1, i+2)) == false)
+                    return 0;
+                continue;
+            }
+            if (check.equals("+") || check.equals("-")) {
+                if (i < s.length()-1 && numCheck(s.substring(i+1, i+2)) == true) {}
+                else
+                    return 0;
+            }
+            if (numCheck(check) == true || s.substring(i, i+1).equals("-") || s.substring(i, i+1).equals("+")) {
+                int count = i;
+                do {
+                    if (s.substring(count, count+1).equals(" ") || s.substring(count, count+1).equals(".")) {
+                        break;
+                    }
+                    if (numCheck(s.substring(count, count+1)) == false && count!= i)
+                        break;
+                    if (s.substring(count, count+1) == "0")
+                        continue;
+                    else ret+=s.substring(count,count+1);
+                    count++;
+                    if (count >= s.length())
+                        break;
+                } while (count < s.length());
+                
+                break;
+            }
+            if (numCheck(check) == false)
+                return 0;
+        }
+        
+        if (ret == "")
+            return 0;
+        try {
+            int x = Integer.parseInt(ret);
+            return x;
+        } catch (NumberFormatException e) {
+            if (ret.substring(0, 1).equals("-"))
+                return -2147483647-1;
+            else
+                return 2147483647;
+        }
+    }
+}
